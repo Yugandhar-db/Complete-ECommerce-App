@@ -1,15 +1,19 @@
 const router = require("express").Router();
 const Cart = require("../models/Cart");
-// const Products = require("../models/Products")
 const auth = require("../middlewear/auth");
 const Products = require("../models/Products");
-const { route } = require("express/lib/router");
 const User = require("../models/User");
+const { mongoose } = require("mongoose");
 
 router
   .route("/")
-  .get(auth, (req, res) => {
-    res.send("You are on Cart Page...!");
+  .get(auth, async (req, res) => {
+    const UserItems = await Cart.find({ userid: req.user._id }).populate(
+      "item"
+    );
+
+    // console.log(UserItems);
+    res.send(UserItems);
   })
   .post(async (req, res) => {
     console.log(req.body);
@@ -26,26 +30,42 @@ router
     const UserCart = await Cart.findOne({ userid: req.user._id });
     const UserItems = UserCart.items;
 
-    ItemNames = ["E"];
-    UserItems.map(async (e) => {
-      const Product = await Products.findById(e);
-      console.log(Product.Title);
-      ItemNames.push(Product.Title);
-    });
-    // console.log(AllProducts);
+    // console.log(typeof ItemNames);
+    // const result = async function (list) {
+    //   let ItemNames = [];
+    //   await list.map(async (e, id) => {
+    //     const Product = await Products.findById(e);
+    //     console.log([Product.Title, id]);
+    //     ItemNames[id] = Product.Title;
+    //   });
+    //   return ItemNames;
+    // };
+
+    // const final = await result(UserItems);
+
+    // console.log(final);
     // res.write(req.user.username);
-    res.send(ItemNames);
+    res.send({ itemIDs: UserItems });
   })
   .post(auth, async (req, res) => {
-    const TempProd = await Products.findOne({ Title: req.body.items });
+    const ProdId = mongoose.Types.ObjectId(req.body.items);
 
     const UserCart = await Cart.findOneAndUpdate(
-      { userid: req.user._id },
-      {
-        $push: { items: TempProd._id },
-      },
-      { new: true }
+      { userid: req.user._id, item: ProdId },
+      { $inc: { count: 1 }, item: ProdId },
+      { upsert: true, new: true }
     );
+
+    // const UserCart = await Cart.findOneAndUpdate(
+    //   { userid: req.user._id },
+    //   {
+    //     $push: { items: TempProd._id },
+    //   },
+    //   { new: true }
+    // );
+
+    // const UserCart = await Cart.findOne({ userid: req.user._id });
+
     // UserCart.save();
     console.log(UserCart);
 

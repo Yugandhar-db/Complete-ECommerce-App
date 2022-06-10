@@ -7,17 +7,29 @@ import Button from "@mui/material/Button";
 import CardHeader from "react-bootstrap/esm/CardHeader";
 import TextField from "@mui/material/TextField";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { Alert } from "@mui/material";
-import { LoginSubmit } from "../apiManager/index";
+import { LoginSubmit, validateUser, SigninSubmit } from "../apiManager/index";
+import Header from "../Components/Header";
+import { motion } from "framer-motion";
 
 const Home = () => {
   let navigate = useNavigate();
 
+  const loginRef = useRef({
+    email: "",
+    password: "",
+  });
+
+  const signinRef = useRef({
+    username: "",
+    email: "",
+    password: "",
+    dob: "",
+  });
+
   const loginclick = async () => {
     const logged = await LoginSubmit(
-      loginEmailRef.current.value,
-      loginPassRef.current.value
+      loginRef.current.email.value,
+      loginRef.current.password.value
     );
     if (logged) {
       navigate("/userhome");
@@ -27,44 +39,42 @@ const Home = () => {
     }
   };
 
-  const [loginData, setLoginData] = useState({
-    email: "",
-    password: "",
-  });
-  const [signinData, setSigninData] = useState({
-    username: "",
-    email: "",
-    password: "",
-    dob: "",
-  });
-  const loginRef = useRef({
-    email: "",
-    password: "",
-  });
-
-  const loginEmailRef = useRef(null);
-  const loginPassRef = useRef(null);
-  const signinRef = useRef({
-    username: "",
-    email: "",
-    password: "",
-    dob: "",
-  });
-
-  const signinSubmit = () => {
-    setSigninData(() => ({
-      email: signinRef.current.email.value,
-      password: signinRef.current.password.value,
-      username: signinRef.current.username.value,
-      dob: signinRef.current.dob.value,
-    }));
+  const signinClick = async () => {
+    // console.log(signinRef.current.email.value);
+    const signed = await SigninSubmit(
+      signinRef.current.username.value,
+      signinRef.current.email.value,
+      signinRef.current.password.value,
+      signinRef.current.dob.value
+    );
+    if (signed) {
+      navigate("/userhome");
+    } else {
+      console.log("Something went wrong..!");
+      navigate("/home");
+    }
   };
   const navigateForgetPsswd = () => {
     navigate("/forgotpassword");
   };
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    console.log("useEffetc ===> ", token);
+    async function getValidate() {
+      const validated = await validateUser();
+      if (validated === true) return navigate("/userhome");
+    }
+    getValidate();
+  }, []);
+
   return (
-    <>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      <Header />
       <Grid container justifyContent="center" p={2}>
         <h1>Welcome..!</h1>
       </Grid>
@@ -86,13 +96,17 @@ const Home = () => {
             >
               <TextField
                 id="outlined-basic"
-                inputRef={loginEmailRef}
+                inputRef={(el) => {
+                  loginRef.current.email = el;
+                }}
                 label="Email"
                 variant="outlined"
               />
               <TextField
                 id="outlined-basic"
-                inputRef={loginPassRef}
+                inputRef={(el) => {
+                  loginRef.current.password = el;
+                }}
                 label="Password"
                 variant="outlined"
               />
@@ -135,12 +149,12 @@ const Home = () => {
                 id="outlined-basic"
                 label="Username"
                 variant="outlined"
-                inputRef={(el) => (signinRef.current.password = el)}
+                inputRef={(el) => (signinRef.current.username = el)}
               />
               <TextField
                 id="outlined-basic"
                 label="Email"
-                inputRef={(el) => (signinRef.current.password = el)}
+                inputRef={(el) => (signinRef.current.email = el)}
                 variant="outlined"
               />
               <TextField
@@ -153,18 +167,18 @@ const Home = () => {
                 id="outlined-basic"
                 label="Date of Birth"
                 variant="outlined"
-                inputRef={(el) => (signinRef.current.password = el)}
+                inputRef={(el) => (signinRef.current.dob = el)}
               />
             </CardContent>
             <CardActions justify="space-between">
-              <Button size="small" onClick={signinSubmit}>
+              <Button size="small" onClick={signinClick}>
                 Submit
               </Button>
             </CardActions>
           </Grid>
         </Grid>
       </Container>
-    </>
+    </motion.div>
   );
 };
 

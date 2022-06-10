@@ -16,11 +16,15 @@ router
     const token = await NewUser.generateAuthToken();
     console.log(token);
 
-    const UserCart = new Cart({ userid: NewUser._id, items: [] });
-    await UserCart.save();
+    // const UserCart = new Cart({ userid: NewUser._id, items: [] });
+    // await UserCart.save();
     // res.write({ NewUser, token });
 
-    res.status(201).send({ NewUser, token });
+    res.status(201).send({
+      jwt: token,
+      message: "Succesfully logged In",
+      user: NewUser,
+    });
   });
 
 router

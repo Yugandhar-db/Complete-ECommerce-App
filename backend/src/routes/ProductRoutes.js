@@ -1,10 +1,18 @@
 const router = require("express").Router();
+const mongoose = require("mongoose");
 const Products = require("../models/Products");
+const auth = require("../middlewear/auth");
 
 router
   .route("/")
-  .get((req, res) => {
-    res.send("You are on Products Page...!");
+  .get(auth, function (req, res) {
+    Products.find({}, function (err, data) {
+      let allProducts = data.map((product) => {
+        return product;
+      });
+      // console.log(typeof allProducts);
+      res.send(allProducts);
+    });
   })
   .post(async (req, res) => {
     console.log(req.body);
@@ -15,9 +23,10 @@ router
   });
 
 router
-  .route("/:name")
+  .route("/:id")
   .get(async (req, res) => {
-    const item = await Products.findOne({ Title: req.params.name });
+    const id = mongoose.Types.ObjectId(req.params.id);
+    const item = await Products.findOne({ _id: id });
     //   console.log(req.params.name)
     res.send(`${item.Title} + ${item.Price}`);
   })

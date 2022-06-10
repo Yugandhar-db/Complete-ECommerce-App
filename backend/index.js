@@ -11,6 +11,7 @@ const ProductRoutes = require("./src/routes/ProductRoutes");
 const CartRoutes = require("./src/routes/CartRoutes");
 const UserRoutes = require("./src/routes/UserRoutes");
 const tokenValidation = require("./src/middlewear/tokenValidation");
+const OrderRoutes = require("./src/routes/OrderRoutes");
 
 mongoose.connect("mongodb://localhost:27017/CompleteECommerceAPP", {
   useNewUrlParser: true,
@@ -23,6 +24,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/products", ProductRoutes);
 app.use("/cart", CartRoutes);
 app.use("/user", UserRoutes);
+app.use("/orders", OrderRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hey You Just Got Started...!");

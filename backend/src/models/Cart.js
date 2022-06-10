@@ -6,12 +6,15 @@ const CartScehma = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
-    items: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Products",
-      },
-    ],
+    item: {
+      type: mongoose.Schema.Types.ObjectId,
+      // type: String,
+      ref: "Products",
+    },
+    count: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,

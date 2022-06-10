@@ -11,6 +11,9 @@ const ProductSchema = mongoose.Schema(
       required: true,
       trim: true,
     },
+    Image: {
+      type: String,
+    },
     // Category: {
     //   type: String,
     //   required: true,
@@ -35,8 +38,6 @@ const ProductSchema = mongoose.Schema(
   }
 );
 
-
-const Products = mongoose.model("Products",ProductSchema);
+const Products = mongoose.model("Products", ProductSchema);
 
 module.exports = Products;
-

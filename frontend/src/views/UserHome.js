@@ -1,41 +1,28 @@
+// importing react library components
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { Button, Grid } from "@mui/material";
+import Card from "react-bootstrap/Card";
+
+// importing custom components and functions
 import {
   LogoutSubmit,
   GetProducts,
   validateUser,
   AddToCart,
-} from "../apiManager/index";
-import { motion } from "framer-motion";
-
-import Button from "@mui/material/Button";
-import Card from "react-bootstrap/Card";
-import Grid from "@mui/material/Grid";
-import Snackbar from "@mui/material/Snackbar";
-
+} from "../apiManager";
 import Header from "../Components/Header";
 
+// main function: User Home Page
 const UserHome = () => {
   const [pdtcs, setProducts] = useState([]);
   const navigate = useNavigate();
-
-  const logoutclick = async () => {
-    await LogoutSubmit();
-    navigate("/home");
-  };
 
   const getProductClick = async () => {
     const temp = await GetProducts();
     console.log(temp.data);
     setProducts(temp.data);
-    // console.log("2");
-  };
-
-  const getCartClick = () => {
-    navigate("/usercart");
-  };
-  const ordersClickHandler = () => {
-    navigate("/userorders");
   };
 
   const addClickHandler = (id) => {
@@ -92,6 +79,7 @@ const UserHome = () => {
                         size="small"
                         onClick={() => addClickHandler(element._id)}
                         className="col-lg-12"
+                        style={{ zIndex: -1 }}
                       >
                         Add To Cart
                       </Button>

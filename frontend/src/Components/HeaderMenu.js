@@ -1,18 +1,22 @@
-import Box from "@mui/material/Box";
-import Avatar from "@mui/material/Avatar";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
+// importing react library components
+import {
+  Box,
+  Avatar,
+  Menu,
+  MenuItem,
+  ListItemIcon,
+  Divider,
+  IconButton,
+  Tooltip,
+} from "@mui/material";
 import Logout from "@mui/icons-material/Logout";
-import React, { useState, useEffect } from "react";
-
+import React from "react";
 import { useNavigate } from "react-router-dom";
 
-import { validateUser, LogoutSubmit } from "../apiManager/index";
+// importing custom functions and components
+import { LogoutSubmit } from "../apiManager";
 
+// main function: Header Menu
 const AccountMenu = () => {
   const navigate = useNavigate();
 

@@ -1,5 +1,9 @@
 import axios from "axios";
 
+const capitalizeFirstLetter = (string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
+
 const LoginSubmit = async (email, password) => {
   try {
     const data = await axios
@@ -10,11 +14,9 @@ const LoginSubmit = async (email, password) => {
       .then((response) => {
         if (response.status === 200) {
           localStorage.setItem("token", response.data.jwt);
-          console.log("Sucessfully logged In..!");
           return response.data;
         }
       });
-
     return data;
   } catch (err) {
     throw err;
@@ -35,7 +37,6 @@ const LogoutSubmit = async () => {
     )
     .then((response) => {
       localStorage.removeItem("token");
-      console.log("Sucessfully logged out..!");
       return response.data;
     })
     .catch((e) => console.log(e));
@@ -83,20 +84,14 @@ const validateUser = async () => {
         },
       })
       .then((response) => {
-        //   console.log("verification is in process...");
-        // console.log(response.data);
         return true;
       })
       .catch((err) => {
-        console.log("No Token is available");
-        // console.log(token);
         return false;
       });
     return temp;
   } else {
-    // console.log("Not there");
     return false;
-    // navigate("/home");
   }
 };
 
@@ -112,9 +107,7 @@ const AddToCart = async (itemId) => {
         },
       }
     )
-    .then((response) => {
-      console.log("Added to Cart Succesfully...!");
-    })
+    .then((response) => {})
     .catch((err) => {
       console.log(err);
     });
@@ -124,7 +117,6 @@ const placeOrder = async (cartData) => {
   const ordercount = cartData.map((e) => {
     return { item: e.item._id, count: e.count };
   });
-  // console.log(ordercount);
 
   const placed = axios
     .post(
@@ -173,7 +165,6 @@ const SigninSubmit = async (username, email, password, dob) => {
       .then((response) => {
         if (response.status === 201) {
           localStorage.setItem("token", response.data.jwt);
-          console.log("Sucessfully Registered..!");
           return response.data;
         }
       });
@@ -193,4 +184,5 @@ export {
   placeOrder,
   GetOrders,
   SigninSubmit,
+  capitalizeFirstLetter,
 };

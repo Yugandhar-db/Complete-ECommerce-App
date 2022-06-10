@@ -1,13 +1,16 @@
+// importing react library components
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { validateUser, LogoutSubmit, GetOrders } from "../apiManager/index";
-import Card from "react-bootstrap/Card";
-import Button from "@mui/material/Button";
-import Grid from "@mui/material/Grid";
-import ListGroup from "react-bootstrap/ListGroup";
-import Divider from "@mui/material/Divider";
-import Header from "../Components/Header";
+import { useNavigate, NavLink } from "react-router-dom";
+import { Card, ListGroup } from "react-bootstrap";
+import { Divider, Grid } from "@mui/material";
 import { motion } from "framer-motion";
+
+// importing custom components and functions
+import Header from "../Components/Header";
+import Footer from "../Components/Footer";
+import { validateUser, GetOrders } from "../apiManager";
+
+// main function: Orders Page View
 const UserOrders = () => {
   const [orders, setOrders] = useState([]);
   const navigate = useNavigate();
@@ -24,7 +27,6 @@ const UserOrders = () => {
     }
     getValidate();
     getOrdersClick();
-    // console.log(orders);
   }, []);
 
   return (
@@ -33,23 +35,24 @@ const UserOrders = () => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      {" "}
       <Header page="orders" />
-      <div style={{ padding: "4rem 0 0 0" }}>
-        <div>Orders Page</div>
 
+      <div style={{ padding: "4rem 4rem 4rem 4rem" }}>
         {orders.length ? (
           <div>
             <Grid
               container
-              justifyContent="flex-start"
+              justifyContent="space-around"
               spacing={2}
               columnGap={2}
-              direction="row"
             >
               {orders.map((element, id) => {
                 return (
-                  <Card border="primary" style={{ width: "18rem" }}>
+                  <Card
+                    border="primary"
+                    style={{ width: "18rem" }}
+                    key={element._id}
+                  >
                     <Card.Header as="h4">Order {id + 1}</Card.Header>
                     <Divider />
 
@@ -57,7 +60,7 @@ const UserOrders = () => {
                       <ListGroup className="list-group-flush">
                         {element.items.map((e) => {
                           return (
-                            <ListGroup.Item>
+                            <ListGroup.Item key={e._id}>
                               <div
                                 style={{
                                   display: "flex",
@@ -88,9 +91,13 @@ const UserOrders = () => {
             </Grid>
           </div>
         ) : (
-          <h4>No Orders as of now</h4>
+          <h4>
+            You haven't placed any orders. Look at all Products{" "}
+            <NavLink to="/userhome">here</NavLink>
+          </h4>
         )}
       </div>
+      <Footer count={orders.length} />
     </motion.div>
   );
 };

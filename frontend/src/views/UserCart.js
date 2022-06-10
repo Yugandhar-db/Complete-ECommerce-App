@@ -1,25 +1,18 @@
+// importing react library components
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import {
-  GetCart,
-  validateUser,
-  LogoutSubmit,
-  placeOrder,
-} from "../apiManager/index";
+import { useNavigate, NavLink } from "react-router-dom";
 import Card from "react-bootstrap/Card";
-import Header from "../Components/Header";
-import Button from "@mui/material/Button";
-import Grid from "@mui/material/Grid";
+import { Button, Grid } from "@mui/material";
 import { motion } from "framer-motion";
 
+// importing custom components and functions
+import { GetCart, validateUser, placeOrder } from "../apiManager";
+import Header from "../Components/Header";
+
+// main function: User Cart Page
 const UserCart = () => {
   const [cartData, setCartData] = useState([]);
   const navigate = useNavigate();
-
-  const logoutclick = () => {
-    LogoutSubmit();
-    navigate("/home");
-  };
 
   const getCartClick = async () => {
     const temp = await GetCart();
@@ -27,17 +20,9 @@ const UserCart = () => {
     setCartData(temp.data);
   };
 
-  const homeClickHandler = () => {
-    navigate("/userhome");
-  };
-  const ordersClickHandler = () => {
-    navigate("/userorders");
-  };
-
   const placeOrderClickHandler = async () => {
-    // console.log(cartData);
     const result = await placeOrder(cartData);
-    // console.log(result);
+
     if (result === 200) {
       navigate("/userhome");
     }
@@ -114,7 +99,10 @@ const UserCart = () => {
               })}
             </>
           ) : (
-            <h1>No Items in Cart</h1>
+            <h4>
+              No items in your cart. Get your cart filled from{" "}
+              <NavLink to="/userhome">here</NavLink>
+            </h4>
           )}
         </Grid>
       </div>

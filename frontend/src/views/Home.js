@@ -1,16 +1,23 @@
-import React, { useState, useRef, useEffect } from "react";
-import Grid from "@mui/material/Grid";
+// importing react library components
+import React, { useRef, useEffect } from "react";
 import { Container } from "@mui/system";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import Button from "@mui/material/Button";
 import CardHeader from "react-bootstrap/esm/CardHeader";
-import TextField from "@mui/material/TextField";
 import { useNavigate } from "react-router-dom";
-import { LoginSubmit, validateUser, SigninSubmit } from "../apiManager/index";
-import Header from "../Components/Header";
 import { motion } from "framer-motion";
+import {
+  Divider,
+  Grid,
+  CardActions,
+  CardContent,
+  Button,
+  TextField,
+} from "@mui/material";
 
+// importing custom components and functions
+import { LoginSubmit, validateUser, SigninSubmit } from "../apiManager";
+import Header from "../Components/Header";
+
+// main function: Home Page
 const Home = () => {
   let navigate = useNavigate();
 
@@ -50,7 +57,6 @@ const Home = () => {
     if (signed) {
       navigate("/userhome");
     } else {
-      console.log("Something went wrong..!");
       navigate("/home");
     }
   };
@@ -79,10 +85,12 @@ const Home = () => {
         <h1>Welcome..!</h1>
       </Grid>
       <Container sx={{ bgcolor: "#cfe8fc" }}>
-        <Grid container spacing={3} p={2} sx={{}}>
+        <Grid container columnSpacing={3} justifyContent="space-around">
           <Grid
+            container
             item
-            lg={4}
+            lg={6}
+            direction="column"
             sx={{
               backgroundColor: "#ddd",
               m: 2,
@@ -92,9 +100,12 @@ const Home = () => {
             <CardContent
               sx={{
                 "& > :not(style)": { m: 1, width: "25ch" },
+                display: "flex",
+                justifyContent: "space-between",
               }}
             >
               <TextField
+                fullWidth
                 id="outlined-basic"
                 inputRef={(el) => {
                   loginRef.current.email = el;
@@ -103,6 +114,7 @@ const Home = () => {
                 variant="outlined"
               />
               <TextField
+                fullWidth
                 id="outlined-basic"
                 inputRef={(el) => {
                   loginRef.current.password = el;
@@ -111,22 +123,25 @@ const Home = () => {
                 variant="outlined"
               />
             </CardContent>
-            <CardActions justify="space-between">
+            <CardActions style={{ display: "flex", justifyContent: "center" }}>
               <Button size="small" onClick={loginclick}>
                 Submit
               </Button>
             </CardActions>
-            <hr></hr>
+            <Divider />
             <Grid item lg={4} sx={{ backgroundColor: "#ddd", border: "#000" }}>
               <CardHeader>Forgot Password</CardHeader>
-              <CardContent style={{ width: "200px" }}>
+              <CardContent>
                 <TextField
+                  fullWidth
                   id="outlined-basic"
                   label="Email"
                   variant="outlined"
                 />
               </CardContent>
-              <CardActions justify="space-between">
+              <CardActions
+                style={{ display: "flex", justifyContent: "center" }}
+              >
                 <Button size="small" onClick={navigateForgetPsswd}>
                   Click here to Reset
                 </Button>
@@ -136,10 +151,14 @@ const Home = () => {
 
           <Grid
             item
-            lg={4}
-            sx={{ backgroundColor: "#ddd", border: "#000", m: 2 }}
+            lg={5}
+            sx={{
+              backgroundColor: "#ddd",
+              border: "#000",
+              m: 2,
+            }}
           >
-            <CardHeader>Sign In</CardHeader>
+            <CardHeader>Sign Up</CardHeader>
             <CardContent
               sx={{
                 "& > :not(style)": { m: 1, width: "25ch" },
@@ -170,7 +189,7 @@ const Home = () => {
                 inputRef={(el) => (signinRef.current.dob = el)}
               />
             </CardContent>
-            <CardActions justify="space-between">
+            <CardActions style={{ display: "flex", justifyContent: "center" }}>
               <Button size="small" onClick={signinClick}>
                 Submit
               </Button>

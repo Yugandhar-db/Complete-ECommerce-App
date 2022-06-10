@@ -1,26 +1,19 @@
+// importing react library components
 import React, { useState, useEffect } from "react";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import PhoneIcon from "@mui/icons-material/Phone";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import PersonPinIcon from "@mui/icons-material/PersonPin";
-import { Grid } from "@mui/material";
-
-import Button from "@mui/material/Button";
+import { Grid, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { Navbar, Nav, Container } from "react-bootstrap";
-import { validateUser, LogoutSubmit } from "../apiManager/index";
+import { Navbar } from "react-bootstrap";
+
+// importing custom components and functions
+import { validateUser, capitalizeFirstLetter } from "../apiManager";
 import AccountMenu from "./HeaderMenu";
 
+// main function : Header component
 const Header = (props) => {
   const [isLogged, setIsLogged] = useState(false);
-  const [value, setValue] = React.useState(0);
 
   const navigate = useNavigate();
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
   const ordersClickHandler = () => {
     navigate("/userorders");
   };
@@ -37,7 +30,6 @@ const Header = (props) => {
     }
     getValidate();
   }, []);
-  //   console.log(`Page Prop Value : ${props.page}`);
 
   const page = props.page;
 
@@ -57,7 +49,7 @@ const Header = (props) => {
           }}
         >
           <div>
-            <h3>This is Header Part </h3>
+            <h3>You are in {capitalizeFirstLetter(page)} Page </h3>
           </div>
           <div>
             <Grid container columnGap={2} justifyContent="flex-end">
@@ -66,7 +58,7 @@ const Header = (props) => {
                   variant={page == "home" ? "text" : "outlined"}
                   onClick={homeClickHandler}
                 >
-                  Go to Home
+                  Go Home
                 </Button>
               </Grid>
               <Grid item>
@@ -74,7 +66,7 @@ const Header = (props) => {
                   variant={page == "cart" ? "text" : "outlined"}
                   onClick={getCartClick}
                 >
-                  Go to Cart
+                  My Cart
                 </Button>
               </Grid>
               <Grid item>
